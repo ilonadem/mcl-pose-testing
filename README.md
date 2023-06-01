@@ -7,7 +7,7 @@ Based on PoseNet infrastructure of this repository is based on this repo: (https
 To install the required packages in a conda environment:
 
 ```
-conda env create -f environment.yml
+conda env create -f env.yml
 conda activate tf2
 ```
 

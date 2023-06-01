@@ -1,4 +1,6 @@
 ################################################
+# This script saves keypoint coordinates that are outputted 
+# by the pose estimation model
 
 # import tensorflow as tf
 import cv2
@@ -12,6 +14,7 @@ import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 
 parser = argparse.ArgumentParser()
+# parser.add_argument('--video', type=str, help='video file to run pose model on')
 parser.add_argument('--model', type=int, default=101)
 parser.add_argument('--cam_id', type=int, default=0)
 parser.add_argument('--cam_width', type=int, default=1280)
@@ -40,8 +43,8 @@ def valid_resolution(width, height, output_stride=16):
     return target_width, target_height
 
 def main():
-    video_files = ['cam1_2', 'cam2_2', 'cam3_2', 'cam4_2']
-    # video_files = ['recording1', 'recording2', 'recording3', 'recording4']
+    # video_files = ['cam1_2', 'cam2_2', 'cam3_2', 'cam4_2']
+    video_files = ['cam2_2']
     
     for video_file in video_files:
         start_time, end_time = 10.51 + (40/6000), 10.51 + (48/6000)
@@ -49,12 +52,6 @@ def main():
         with tf.Session() as sess:
             model_cfg, model_outputs = posenet.load_model(args.model, sess)
             output_stride = model_cfg['output_stride']
-
-            # if args.file is not None:
-            #     cap = cv2.VideoCapture(args.file)
-            # else:
-            #     cap = cv2.VideoCapture(args.cam_id)
-            
 
             # Create a VideoCapture object and read from input file
             # If the input is the camera, pass 0 instead of the video file name
@@ -67,7 +64,6 @@ def main():
             cap.set(3, args.cam_width)
             cap.set(4, args.cam_height)
 
-            # start = time.time()
             frame_count = 0
             while(cap.isOpened()):
 
@@ -105,25 +101,13 @@ def main():
                         kp = poses_list[i]
                         kp_coords = pose[i]
                         kp_score = scores[i]
-
-                        # print(f'kp: {kp}, kp coords: {kp_coords}, kp score: {kp_score}')
-                
                         poses_dict[kp].append([kp_coords[1], kp_coords[0], kp_score])
-            
-            
-                # print("pose scores shape: ", pose_scores.shape)
-                # print("keypoint scores shape: ", keypoint_scores.shape)
-                # print(keypoint_scores.shape)
-                # print(keypoint_coords[0,:].shape
 
                 else:
                     break
 
                 # input_image, display_image, output_scale = posenet.read_cap(
                 #     cap, scale_factor=args.scale_factor, output_stride=output_stride)
-
-                
-                
 
                 # # TODO this isn't particularly fast, use GL for drawing and display someday...
                 # overlay_image = posenet.draw_skel_and_kp(
@@ -141,7 +125,7 @@ def main():
             cv2.destroyAllWindows()
 
             # print('Average FPS: ', frame_count / (time.time() - start))
-            csv_file = f'videos/{video_file}_df.csv'
+            csv_file = f'keypoint_files/{video_file}_df.csv'
             print("saving csv file name: ", csv_file)
 
             times = np.linspace(start_time, end_time, frame_count+1)
