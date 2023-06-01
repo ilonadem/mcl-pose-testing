@@ -76,12 +76,14 @@ def create_df_from_hour(hourdir):
     print("DATA FILES", data_files)
     data_files.sort()
     
+    print(data_files)
     df_full = create_df(data_files[0])
 
+    # if len(data_files) > 1:
     for f in data_files[1:]:
         df_new = create_df(f)
         df_full = pd.concat([df_full, df_new])
-        
+            
     return df_full
 
 def crop_df_by_time(t_min, t_max, df):

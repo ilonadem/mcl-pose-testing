@@ -18,6 +18,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--keypoint_folder', type=str, help='specify file containing keypoint csvs')
 parser.add_argument('--title', type=str)
+parser.add_argument('--show', type=bool, default=False)
 args = parser.parse_args()
 
 def init():
@@ -82,7 +83,8 @@ for i in range(len(coral_dataframes)):
     # ani = FuncAnimation(fig, animate, interval=10)
     ani = FuncAnimation(fig, partial(animate, coral_df=coral_df, fig=fig, ax=ax), frames=len(times)-1, init_func=init)
     # ani = FuncAnimation(fig, partial(animate2, coral_df=coral_df, fig=fig, ax=ax), interval=len(coral_df)-3, save_count=len(coral_df)-3, repeat=False)
-    # plt.show()
+    if args.show:
+        plt.show()
     
     # save animation:
     writervideo = FFMpegWriter(fps=20)
