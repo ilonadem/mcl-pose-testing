@@ -82,8 +82,8 @@ for i in range(len(coral_dataframes)):
     # ani = FuncAnimation(fig, animate, interval=10)
     ani = FuncAnimation(fig, partial(animate, coral_df=coral_df, fig=fig, ax=ax), frames=len(times)-1, init_func=init)
     # ani = FuncAnimation(fig, partial(animate2, coral_df=coral_df, fig=fig, ax=ax), interval=len(coral_df)-3, save_count=len(coral_df)-3, repeat=False)
-    plt.show()
+    # plt.show()
     
     # save animation:
     writervideo = FFMpegWriter(fps=20)
-    ani.save(args.title, writer=writervideo)
+    ani.save(vid_title, writer=writervideo)
