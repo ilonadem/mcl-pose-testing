@@ -19,6 +19,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--keypoint_folder', type=str, help='specify file containing keypoint csvs')
 parser.add_argument('--title', type=str)
 parser.add_argument('--show', type=bool, default=False)
+parser.add_argument('--start', type=float, default=0)
+parser.add_argument('--end', type=float, default=-1)
 args = parser.parse_args()
 
 def init():
@@ -64,11 +66,15 @@ def animate(frame, coral_df, fig, ax, detection_threshold=0.0):
     
     return ax
 
+# create and clean dataframe
 kp_df = create_df_from_hour(args.keypoint_folder)
 kp_df = add_custom_time(kp_df)
 kp_df = clean_keypoints(kp_df)
+kp_df = crop_df_by_time(args.start, args.end, kp_df)
 
-# GENERATE ANIMATIONS 
+print(kp_df.head())
+
+# generate animations
 fig, ax = plt.subplots()
 width, height = 640, 480
 

@@ -72,7 +72,7 @@ def create_df_from_hour(hourdir):
         
         return f_df
             
-    data_files = listdir(hourdir)
+    data_files = [file for file in listdir(hourdir) if '.csv' in file] 
     print("DATA FILES", data_files)
     data_files.sort()
     
@@ -87,9 +87,21 @@ def create_df_from_hour(hourdir):
     return df_full
 
 def crop_df_by_time(t_min, t_max, df):
-    df = df[df['time_int'].values>=t_min]
-    df = df[df['time_int'].values<=t_max]
+    if t_min > 0:
+        df = df[df['time_int'].values>=t_min]
+    if t_max > 0:
+        df = df[df['time_int'].values<=t_max]
     return df
+
+def split_x_y(coral_df):
+    # x and y vals
+    for kp in keypoints:
+        coral_df[f'{kp}_X'] = coral_df.apply(lambda row: np.float(row[kp][0]), axis=1)
+        coral_df[f'{kp}_Y'] = coral_df.apply(lambda row: np.float(row[kp][1]), axis=1)
+    #  delete clunk   
+    for kp in keypoints:
+        del coral_df[kp]
+    return coral_df
 
 def add_com(clean_coral_df):
     
@@ -201,5 +213,17 @@ def clean_keypoints(coral_df):
 #         del coral_df[kp]
         
     coral_df['time_int'] = coral_df.apply(lambda row: int(row.time[:2]) + int(row.time[3:5])/10e1 + int(row.time[6:8])/10e3 + int(row.time[9:])/10e9, axis=1)
-        
+    # coral_df['time_int'] = coral_df['time_int'].round(5)
     return coral_df
+
+def time_int_to_mins(df):
+    df['time_int'] = df.apply(lambda row: int(row.time[3:5]) + float(row.time[6:])/(60), axis=1)
+    
+    return df
+
+def time_correct(df):
+    # df['time_int'] = df.apply(lambda row: float('0'+str(row.time_int)[2:]), axis=1)
+    print(df['time_int'])
+    df['time_int'] = df.apply(lambda row: float(100*(row.time_int - int(row.time_int))), axis=1)
+    print(df['time_int'])
+    return df
