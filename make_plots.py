@@ -27,7 +27,7 @@ def plot_side_by_side(df, vars_list, axis_title, title):
         ax[i,1].set_title(f'{vars_list[i]} y coordinate over time')
     
     if args.save:
-        fig.savefig(f'{title}_sidebyside.png')
+        fig.savefig(f'{args.keypoint_folder}/{title}_sidebyside.png')
 
     return fig, ax
 
