@@ -49,6 +49,21 @@ TODO: add different models, or have scripts specific to each model
 This script generates a stick figure animation from an input csv of keypoints
 
 `python make_keypoint_animation.py --keypoint_folder [name of folder containing keypoint csvs] --title [video title]`
+
+### make_plots.py
+This script plots variables of interest over a specified time region. It takes in a .csv file of keypoint coordinates and outputs pairs of plots (or grids of plots)
+
+If you want to plot a single coordinate, try something like (where vars is a list of keypoints):
+
+`python make_plots.py --keypoint_folder [folder containing keypoint csv] --vars "NOSE" "LEFT_KNEE"`
+
+If you want to specify a time interval within which to plot:
+
+`python make_plots.py --keypoint_folder [folder containing keypoint csv] --start [start time (float number)] --end [end time (float number)] --vars "NOSE" "LEFT_KNEE"`
+
+And if you want to save the resulting plot:
+`python make_plots.py --keypoint_folder [folder containing keypoint csv] --start [start time (float number)] --end [end time (float number)] --save True --vars "NOSE" "LEFT_KNEE"`
+
 ### image_demo.py 
 Image demo runs inference on an input folder of images and outputs those images with the keypoints and skeleton overlayed.
 
