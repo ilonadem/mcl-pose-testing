@@ -191,11 +191,8 @@ def add_com(clean_coral_df):
     return clean_coral_df
 
 def add_custom_time(df):
-    print(df['NOSE'][1][-1])
-    print(df.keys())
     # df['time'] = df.apply(lambda row: f"{((row.NOSE[-1][:2])-4):02}" + row.NOSE[-1][2:], axis=1)
     df['time'] = df.apply(lambda row: float(str(row.NOSE[-1])[6:17]), axis=1)
-    print(df['time'])
     return df
 
 def normalize_df(df, var1, var2):
@@ -228,7 +225,7 @@ def time_int_to_mins(df):
 
 def time_correct(df):
     # df['time_int'] = df.apply(lambda row: float('0'+str(row.time_int)[2:]), axis=1)
-    print(df['time_int'])
+    # print(df['time_int'])
     df['time_int'] = df.apply(lambda row: float(100*(row.time_int - int(row.time_int))), axis=1)
-    print(df['time_int'])
+    # print(df['time_int'])
     return df

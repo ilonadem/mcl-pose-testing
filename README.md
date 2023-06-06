@@ -74,6 +74,9 @@ python make_keypoint_animation.py --keypoint_folder [name of folder containing k
 This script plots variables of interest over a specified time region. It takes in a .csv file of keypoint coordinates and outputs pairs of plots (or grids of plots)
 
 If you want to plot a single coordinate, try something like (where vars is a list of keypoints):
+```
+python make_plots.py 
+```
 
 ```
 python make_plots.py --keypoint_folder [folder containing keypoint csv] --vars "NOSE" "LEFT_KNEE"
