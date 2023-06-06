@@ -38,36 +38,60 @@ The first time these apps are run (or the library is used) model weights will be
 
 For all demos, the model can be specified with the '--model` argument by using its ordinal id (0-3) or integer depth multiplier (50, 75, 100, 101). The default is the 101 model. -->
 
+### download_kp_dfs.sh
+This script downloads dataset from google cloud SDK. You'll need to have Google cloud set up with the posebucket info, according to https://cloud.google.com/sdk/docs/install-sdk. To download the data just run:
+
+```
+bash download_data.sh
+```
+
+TODO: add different models, or have scripts specific to each model
+
 ### generate_keypoints.py
 This script generates a keypoint csv of posenet keypoint ID's for a given input video, using mobilenet pose estimation.
-
-`python generate_keypoints.py`
+```
+python generate_keypoints.py
+```
+If you'd like to specifiy which video exactly you want analyzed:
+```
+python generate_keypoints.py --video [video file of interest]
+```
 
 TODO: add different models, or have scripts specific to each model
 
 ### make_keypoint_animation.py
 This script generates a stick figure animation from an input csv of keypoints
 
-`python make_keypoint_animation.py --keypoint_folder [name of folder containing keypoint csvs] --title [video title]`
+```
+python make_keypoint_animation.py --keypoint_folder [name of folder containing keypoint csvs] --title [video title]
+```
 
 ### make_plots.py
 This script plots variables of interest over a specified time region. It takes in a .csv file of keypoint coordinates and outputs pairs of plots (or grids of plots)
 
 If you want to plot a single coordinate, try something like (where vars is a list of keypoints):
 
-`python make_plots.py --keypoint_folder [folder containing keypoint csv] --vars "NOSE" "LEFT_KNEE"`
+```
+python make_plots.py --keypoint_folder [folder containing keypoint csv] --vars "NOSE" "LEFT_KNEE"
+```
 
 If you want to specify a time interval within which to plot:
 
-`python make_plots.py --keypoint_folder [folder containing keypoint csv] --start [start time (float number)] --end [end time (float number)] --vars "NOSE" "LEFT_KNEE"`
+```
+python make_plots.py --keypoint_folder [folder containing keypoint csv] --start [start time (float number)] --end [end time (float number)] --vars "NOSE" "LEFT_KNEE"
+```
 
 And if you want to save the resulting plot:
-`python make_plots.py --keypoint_folder [folder containing keypoint csv] --start [start time (float number)] --end [end time (float number)] --save True --vars "NOSE" "LEFT_KNEE"`
+```
+python make_plots.py --keypoint_folder [folder containing keypoint csv] --start [start time (float number)] --end [end time (float number)] --save True --vars "NOSE" "LEFT_KNEE"`
+```
 
 ### image_demo.py 
 Image demo runs inference on an input folder of images and outputs those images with the keypoints and skeleton overlayed.
 
-`python image_demo.py --model 101 --image_dir ./images --output_dir ./output`
+```
+python image_demo.py --model 101 --image_dir ./images --output_dir ./output
+```
 
 A folder of suitable test images can be downloaded by first running the `get_test_images.py` script.
 
