@@ -63,8 +63,12 @@ TODO: add different models, or have scripts specific to each model
 This script generates a stick figure animation from an input csv of keypoints
 
 ```
-python make_keypoint_animation.py --keypoint_folder [name of folder containing keypoint csvs] --title [video title]
+python make_keypoint_animation.py 
 ```
+
+<!-- ```
+python make_keypoint_animation.py --keypoint_folder [name of folder containing keypoint csvs] --title [video title]
+``` -->
 
 ### make_plots.py
 This script plots variables of interest over a specified time region. It takes in a .csv file of keypoint coordinates and outputs pairs of plots (or grids of plots)

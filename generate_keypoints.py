@@ -115,7 +115,7 @@ def main():
             cv2.destroyAllWindows()
 
             # print('Average FPS: ', frame_count / (time.time() - start))
-            csv_file = f'keypoint_files/{video_file}/{video_file}_posenet_df.csv'
+            csv_file = f'keypoint_files/patient_kps/{video_file}/{video_file}_posenet_df.csv'
             print("saving csv file name: ", csv_file)
 
             times = np.linspace(start_time, end_time, frame_count+1)
@@ -125,8 +125,7 @@ def main():
                     # print(frame)
                     poses_dict[kp][frame].append('00:00:' + str(times[frame]))
 
-            isExist = os.path.exists(path)
-            os.makedirs(f'keypoint_files/{video_file}')
+            os.makedirs(f'keypoint_files/patient_kps/{video_file}')
             with open(csv_file, 'w') as f:
                 writer = csv.DictWriter(f, poses_dict.keys())
                 writer.writeheader()

@@ -191,7 +191,11 @@ def add_com(clean_coral_df):
     return clean_coral_df
 
 def add_custom_time(df):
-    df['time'] = df.apply(lambda row: f"{(int(row.NOSE[-1][:2])-4):02}" + row.NOSE[-1][2:], axis=1)
+    print(df['NOSE'][1][-1])
+    print(df.keys())
+    # df['time'] = df.apply(lambda row: f"{((row.NOSE[-1][:2])-4):02}" + row.NOSE[-1][2:], axis=1)
+    df['time'] = df.apply(lambda row: float(str(row.NOSE[-1])[6:17]), axis=1)
+    print(df['time'])
     return df
 
 def normalize_df(df, var1, var2):
@@ -212,8 +216,9 @@ def clean_keypoints(coral_df):
 #     for kp in keypoints:
 #         del coral_df[kp]
         
-    coral_df['time_int'] = coral_df.apply(lambda row: int(row.time[:2]) + int(row.time[3:5])/10e1 + int(row.time[6:8])/10e3 + int(row.time[9:])/10e9, axis=1)
+    # coral_df['time_int'] = coral_df.apply(lambda row: int(str(row.time)[:2]) + int(str(row.time)[3:5])/10e1 + int(str(row.time)[6:8])/10e3 + int(str(row.time)[9:])/10e9, axis=1)
     # coral_df['time_int'] = coral_df['time_int'].round(5)
+    coral_df['time_int'] = coral_df['time']
     return coral_df
 
 def time_int_to_mins(df):

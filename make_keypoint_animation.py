@@ -16,7 +16,7 @@ from functools import partial
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--keypoint_folder', type=str, help='specify file containing keypoint csvs')
+parser.add_argument('--keypoint_folder', default='keypoint_files/patient_kps/', type=str, help='specify file containing keypoint csvs')
 parser.add_argument('--title', type=str)
 parser.add_argument('--show', type=bool, default=False)
 parser.add_argument('--start', type=float, default=0)
@@ -67,31 +67,36 @@ def animate(frame, coral_df, fig, ax, detection_threshold=0.0):
     return ax
 
 # create and clean dataframe
-kp_df = create_df_from_hour(args.keypoint_folder)
-kp_df = add_custom_time(kp_df)
-kp_df = clean_keypoints(kp_df)
-kp_df = crop_df_by_time(args.start, args.end, kp_df)
+for kp_folder in os.listdir(args.keypoint_folder):
+    folder = 'keypoint_files/patient_kps/' + kp_folder + '/'
+    print("folder:", folder)
+    kp_df = create_df_from_hour(folder)
+    kp_df = add_custom_time(kp_df)
+    kp_df = clean_keypoints(kp_df)
+    kp_df = crop_df_by_time(args.start, args.end, kp_df)
 
-print(kp_df.head())
+    print(kp_df.head())
 
-# generate animations
-fig, ax = plt.subplots()
-width, height = 640, 480
+    # generate animations
+    fig, ax = plt.subplots()
+    width, height = 640, 480
 
-coral_dataframes = [kp_df.copy()]
-file_titles = ['test_animation']
+    coral_dataframes = [kp_df.copy()]
+    # file_titles = ['test_animation']
 
-for i in range(len(coral_dataframes)):
-    coral_df = coral_dataframes[i]
-    vid_title = args.keypoint_folder + '/' + args.title + '.mp4'
-    # coral_df = c1_df.copy()
-    times = coral_df['time_int'].unique()
-    # ani = FuncAnimation(fig, animate, interval=10)
-    ani = FuncAnimation(fig, partial(animate, coral_df=coral_df, fig=fig, ax=ax), frames=len(times)-1, init_func=init)
-    # ani = FuncAnimation(fig, partial(animate2, coral_df=coral_df, fig=fig, ax=ax), interval=len(coral_df)-3, save_count=len(coral_df)-3, repeat=False)
-    if args.show:
-        plt.show()
-    
-    # save animation:
-    writervideo = FFMpegWriter(fps=20)
-    ani.save(vid_title, writer=writervideo)
+    for i in range(len(coral_dataframes)):
+        coral_df = coral_dataframes[i]
+        
+        # coral_df = c1_df.copy()
+        times = coral_df['time_int'].unique()
+        # ani = FuncAnimation(fig, animate, interval=10)
+        ani = FuncAnimation(fig, partial(animate, coral_df=coral_df, fig=fig, ax=ax), frames=len(times)-1, init_func=init)
+        # ani = FuncAnimation(fig, partial(animate2, coral_df=coral_df, fig=fig, ax=ax), interval=len(coral_df)-3, save_count=len(coral_df)-3, repeat=False)
+        if args.show:
+            plt.show()
+        
+        # save animation:
+        vid_title = f'keypoint_files/visualizations/{kp_folder}/{kp_folder}_anim.mp4'
+        os.makedirs(f'keypoint_files/visualizations/{kp_folder}', exist_ok=True)
+        writervideo = FFMpegWriter(fps=20)
+        ani.save(vid_title, writer=writervideo)
