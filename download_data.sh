@@ -1,5 +1,7 @@
 cd keypoint_files
 
+conda deactivate
+
 # download deft_shrimp data
 gsutil -m cp -r \
   "gs://mediapipe-data/neuro_clinic_may_16/deft_shrimp" \
@@ -15,3 +17,5 @@ gsutil -m cp -r \
   .
   
 cd ..
+
+conda activate tf2
