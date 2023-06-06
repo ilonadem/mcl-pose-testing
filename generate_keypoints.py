@@ -126,8 +126,7 @@ def main():
                     poses_dict[kp][frame].append('00:00:' + str(times[frame]))
 
             isExist = os.path.exists(path)
-            if not os.path.exists(f'keypoint_files/{video_file}'):
-                os.makedirs(f'keypoint_files/{video_file}')
+            os.makedirs(f'keypoint_files/{video_file}')
             with open(csv_file, 'w') as f:
                 writer = csv.DictWriter(f, poses_dict.keys())
                 writer.writeheader()
