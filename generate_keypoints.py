@@ -11,6 +11,8 @@ import posenet
 import csv
 import os
 
+import matplotlib.pyplot as plt
+
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 
@@ -35,6 +37,7 @@ def _process_input(source_img, scale_factor=1.0, output_stride=16):
     input_img = cv2.cvtColor(input_img, cv2.COLOR_BGR2RGB).astype(np.float32)
     input_img = input_img * (2.0 / 255.0) - 1.0
     input_img = input_img.reshape(1, target_height, target_width, 3)
+    
     return input_img, source_img, scale
 
 def valid_resolution(width, height, output_stride=16):
@@ -73,6 +76,7 @@ def main():
             while(cap.isOpened()):
 
                 ret, frame = cap.read()
+                # print("frame shape: ", frame.shape)
                 frame_count += 1
                 # input_image, display_image, output_scale = posenet.read_cap(
                 #     cap, scale_factor=args.scale_factor, output_stride=output_stride)
