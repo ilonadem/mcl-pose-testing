@@ -72,6 +72,7 @@ def create_df_from_hour(hourdir):
         
         return f_df
             
+    print("listdir(hourdir): ", listdir(hourdir))
     data_files = [file for file in listdir(hourdir) if '.csv' in file] 
     print("DATA FILES", data_files)
     data_files.sort()
@@ -229,3 +230,14 @@ def time_correct(df):
     df['time_int'] = df.apply(lambda row: float(100*(row.time_int - int(row.time_int))), axis=1)
     # print(df['time_int'])
     return df
+
+def read_movenet_kps(file):
+    raw_df = pd.read_csv(file)
+
+    for kp in keypoints:
+        raw_df[kp] = raw_df[kp].apply(lambda x: literal_eval(x))
+        raw_df[kp] = raw_df[kp].apply(lambda x: [500*(x[1]), 500*(x[0]), x[2], x[3]])
+    
+    raw_df['time'] = raw_df.apply(lambda row: row['NOSE'][-1], axis=1)
+
+    return raw_df
