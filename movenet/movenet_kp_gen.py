@@ -23,6 +23,8 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--savedir', type=str, default='../keypoint_files/movenet', help='specify directory to save keypoint csvs')
 parser.add_argument('--title', type=str, default='movenet', help='specify title of video')
+parser.add_argument('--video_file', type=str, default='../mcl_data/MCL_4_14/videos/test.mp4', help='specify video file')
+parser.add_argument('--model_name', type=str, default='movenet_thunder', help='specify model name')
 args = parser.parse_args()
 
 def movenet(input_image):
@@ -47,10 +49,11 @@ def movenet(input_image):
     keypoints_with_scores = outputs['output_0'].numpy()
     return keypoints_with_scores
 
-model_name = [
-    'movenet_thunder',
-    # 'movenet_lightning',
-]
+# model_name = [
+#     'movenet_thunder',
+#     # 'movenet_lightning',
+# ]
+model_name = args.model_name
 
 # import the model
 if "movenet_lightning" in model_name:
@@ -63,7 +66,7 @@ else:
     raise ValueError("Unsupported model name: %s" % model_name)
 
 # Initialize the video capture object
-mcl_video_file = '/Users/ilonademler/Documents/Harvard/seniorfall/coral/mcl_experiments/mcl_data/MCL_4_14/videos/test.mp4'
+mcl_video_file = args.video_file
 
 cap = cv2.VideoCapture(mcl_video_file)
 if (cap.isOpened()== False): 
@@ -77,7 +80,7 @@ while(cap.isOpened()):
   if ret == True:
     if frame_count == 1:
       frames = frame
-    elif frame_count < 10:
+    else:
       frames = np.concatenate((frames, frame), axis=0)
   else:
     break
@@ -108,8 +111,10 @@ del kp_df['time']
 
 # save as .csv
 print("saving in directory ", args.savedir)
+videoname = args.video_file.split('/')[-1].split('.')[0]
+filename = f'{args.title}_{videoname}_{model_name}_poses.csv'
 os.makedirs(args.savedir, exist_ok=True)
-csv_file = args.savedir + f'/{args.title}_poses.csv'
+csv_file = args.savedir + '/' + filename
 kp_df.to_csv(csv_file, mode='w', index=False)
 
 # for some reason this doesn't work with this version of python :-[
