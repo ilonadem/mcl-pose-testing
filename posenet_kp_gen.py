@@ -47,6 +47,7 @@ def valid_resolution(width, height, output_stride=16):
 
 def main():
     video_dir = 'keypoint_files/patient_videos/'
+    video_dir=''
     
     # get list of video files to be analyzed
     if args.video is not None:
@@ -54,6 +55,7 @@ def main():
     else: 
         video_files = [video_file[:-4] for video_file in os.listdir(video_dir) if '.mp4' in video_file]
     
+    print(video_files)
     for video_file in video_files:
         start_time, end_time = 10.51 + (40/6000), 10.51 + (48/6000)
 
@@ -63,7 +65,8 @@ def main():
 
             # Create a VideoCapture object and read from input file
             # If the input is the camera, pass 0 instead of the video file name
-            cap = cv2.VideoCapture(video_dir + video_file + '.mp4')
+            # cap = cv2.VideoCapture(video_dir + video_file + '.mp4')
+            cap = cv2.VideoCapture(video_file)
 
             # Check if camera opened successfully
             if (cap.isOpened()== False): 
@@ -118,8 +121,10 @@ def main():
             cap.release()
             cv2.destroyAllWindows()
 
+            video_file = (video_file.split('/')[-1]).split('.')[0]
+            print(video_file)
             # print('Average FPS: ', frame_count / (time.time() - start))
-            csv_file = f'keypoint_files/patient_kps/{video_file}/{video_file}_posenet_df.csv'
+            csv_file = f'keypoint_files/posenet/{video_file}_posenet_df.csv'
             print("saving csv file name: ", csv_file)
 
             times = np.linspace(start_time, end_time, frame_count+1)
@@ -129,7 +134,7 @@ def main():
                     # print(frame)
                     poses_dict[kp][frame].append('00:00:' + str(times[frame]))
 
-            os.makedirs(f'keypoint_files/patient_kps/{video_file}')
+            os.makedirs(f'keypoint_files/posenet/{video_file}', exist_ok=True)
             with open(csv_file, 'w') as f:
                 writer = csv.DictWriter(f, poses_dict.keys())
                 writer.writeheader()
